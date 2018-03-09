@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Star Wars GIF's</title>
+
+    <style>
+        #starwars-search {
+          font-weight: 700;
+          font-size: 2em;
+        }
+      </style>
+
+</head>
+<body>
+
+<!--first we need to create an input feild that takes in data, and dynamically creates a button for whatever the user input was--> 
+   <!-- Title -->
+   <h1>Patience You Must Have, My Young Padawan.</h1>
+
+   <!-- Input Form -->
+   <form>
+     <span id="starwars-search">Search anything Star Wars! <input id="search-item" type="text" ><input id="add-item" value="The Force Is Strong With This Search." type="submit"></span>
+   </form>
+
+   <hr>
+   <div id="search-buttons"></div>
+   <!-- List of Star Wars Search Items from user input will show up here -->
+   <div id="item-drop"></div>
+
+   <!-- jQuery -->
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+   <!-- Script -->
+
+<script>
+
+var starwarsCount = 0;
+
+//  On Click event associated with the add-to-do function
+$("#add-item").on("click", function(event) {
+  event.preventDefault();
+
+  var starwarsInput = $("#search-item").val().trim();
+  var starwarsItem = $("<button>"+starwarsInput+"</button>");
+
+  //starwarsItem.attr("id", "item-" + starwarsCount);
+  
+  starwarsItem.attr("data-search-term", starwarsInput);
+  starwarsItem.addClass('search-term-btn');
+  //starwarsItem.append( " "+ starwarsInput);
+
+  
+  //var starwarsClose = $("<button>");
+  //starwarsClose.attr("starwars-search", starwarsCount);
+  //toDoClose.addClass("users-search");
+  //toDoClose.append("X");
+  //starwarsItem = starwarsItem.append(starwarsClose);
+
+  $("#search-buttons").append(starwarsItem);
+
+  $("#search-item").val("");
+
+  starwarsCount++;
+  console.log(starwarsInput);
+
+});
+
+//$('.search-term-btn').on('click', function(e) {
+$('#search-buttons').on('click', '.search-term-btn', function() {
+    console.log('inside api call event handler');
+    //this creates a variable for our api that we can reuse throughout function/other functions
+var searchTerm = $(this).attr("data-search-term")
+var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=n5C5ZtrTA6dHbMjCc2Vxgy5HAsdUwJH8&tag=" + searchTerm;
+
+//this calls our api to get information, starts ajax call
+// two parameters (queryURL, method: GET)
+
+$.ajax({
+  url: queryURL,
+  method: "GET"
+})
+
+//this returns the information from the api so that we can utilize it, stores it in variable
+//our data
+// we use .done to ensure our ajax call is complete before we exec anhything else
+
+.then(function(response) {
+  
+  //creates vaiable that stores image from api, parsing the response ti grab the image.
+
+  var imageUrl = response.data.image_original_url;
+    console.log(response.data);
+  //create variable that utilizes image tag
+
+  var image = $("<img>");
+
+  //adds attributes to catImage variable
+  // 1. url to src
+  // 2. alt text (tooltip)
+  image.attr("src", imageUrl);
+  image.attr("alt", "giphy image");
+
+  //targets images div and adds gif on top of the one thats already on the page
+
+  $("#item-drop").prepend(image);
+});
+
+});
+
+</script>
+
+    
+</body>
+</html>
