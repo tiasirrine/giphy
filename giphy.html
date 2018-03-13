@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Mina" rel="stylesheet">
     <title>Star Wars GIF's</title>
 
     <style>
@@ -66,6 +68,7 @@ var searchTerm = $(this).attr("data-search-term")
 var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=n5C5ZtrTA6dHbMjCc2Vxgy5HAsdUwJH8&limit=10";
 //var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=n5C5ZtrTA6dHbMjCc2Vxgy5HAsdUwJH8&tag=" + searchTerm;
 console.log(queryURL);
+
 //this calls our api to get information, starts ajax call
 // two parameters (queryURL, method: GET)
 
@@ -102,10 +105,12 @@ for (var i = 0; i < results.length; i++){
 
 
   //adds attributes to image variable
-  // 1. url to src
-  // 2. alt text (tooltip)
+  // url to src
+  // alt text (tooltip)
+  //add class to images for click event for pause/stop
   image.attr("src", results[i].images.fixed_height.url);
   image.attr("alt", "giphy image");
+  image.addClass("gif");
 
 //Appends the paragraph and image tag to the imageDiv
 
@@ -119,6 +124,22 @@ imageDiv.append(image);
 
 });
 
+});
+//add event listener that will trigger function when an image is clicked. 
+$(".gif").on("click", function(){
+console.log("working");
+
+var state = $(this).attr("data-state");
+
+var state = $(this).attr("data-state");
+if (state == "still") {
+  $(this).attr("src", $(this).attr("data-animate"));
+  $(this).attr("data-state", "moving");
+}
+else {
+  $(this).attr("src", $(this).attr("data-still"));
+  $(this).attr("data-state", "still");
+}
 });
 
 </script>
