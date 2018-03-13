@@ -39,25 +39,15 @@
 
 var starwarsCount = 0;
 
-//  On Click event associated with the add-to-do function
+//  On Click event that takes user input from form and creates a button that displays their search, while also assigning that input as data item.
 $("#add-item").on("click", function(event) {
   event.preventDefault();
 
   var starwarsInput = $("#search-item").val().trim();
   var starwarsItem = $("<button>"+starwarsInput+"</button>");
-
-  //starwarsItem.attr("id", "item-" + starwarsCount);
   
   starwarsItem.attr("data-search-term", starwarsInput);
   starwarsItem.addClass('search-term-btn');
-  //starwarsItem.append( " "+ starwarsInput);
-
-  
-  //var starwarsClose = $("<button>");
-  //starwarsClose.attr("starwars-search", starwarsCount);
-  //toDoClose.addClass("users-search");
-  //toDoClose.append("X");
-  //starwarsItem = starwarsItem.append(starwarsClose);
 
   $("#search-buttons").append(starwarsItem);
 
@@ -73,8 +63,9 @@ $('#search-buttons').on('click', '.search-term-btn', function() {
     console.log('inside api call event handler');
     //this creates a variable for our api that we can reuse throughout function/other functions
 var searchTerm = $(this).attr("data-search-term")
-var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=n5C5ZtrTA6dHbMjCc2Vxgy5HAsdUwJH8&tag=" + searchTerm;
-
+var queryURL = "https://api.giphy.com/v1/gifs/search?q=" + searchTerm + "&api_key=n5C5ZtrTA6dHbMjCc2Vxgy5HAsdUwJH8&limit=10";
+//var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=n5C5ZtrTA6dHbMjCc2Vxgy5HAsdUwJH8&tag=" + searchTerm;
+console.log(queryURL);
 //this calls our api to get information, starts ajax call
 // two parameters (queryURL, method: GET)
 
@@ -90,22 +81,42 @@ $.ajax({
 .then(function(response) {
   
   //creates vaiable that stores image from api, parsing the response ti grab the image.
+  var results = response.data;
+ 
+    console.log(results);
+    console.log(response);
+  //nested in array, need to access data inside the array and push the data out.
 
-  var imageUrl = response.data.image_original_url;
-    console.log(response.data);
-  //create variable that utilizes image tag
+for (var i = 0; i < results.length; i++){
 
+  //var imageUrl = JSON.stringify(response.data[i].images.original_still.url);
+  //console.log(imageUrl);
+//creating and storing a div tag
+  var imageDiv = $("<div>");
+
+  //create variable that creates and stores image tag
   var image = $("<img>");
 
-  //adds attributes to catImage variable
+  // Creating a paragraph tag with the result item's rating
+  var p = $("<p>").text("Rating: " + results[i].rating);
+
+
+  //adds attributes to image variable
   // 1. url to src
   // 2. alt text (tooltip)
-  image.attr("src", imageUrl);
+  image.attr("src", results[i].images.fixed_height.url);
   image.attr("alt", "giphy image");
+
+//Appends the paragraph and image tag to the imageDiv
+
+imageDiv.append(p);
+imageDiv.append(image);
 
   //targets images div and adds gif on top of the one thats already on the page
 
-  $("#item-drop").prepend(image);
+  $("#item-drop").prepend(imageDiv);
+}
+
 });
 
 });
