@@ -24,11 +24,17 @@
 
    <!-- Input Form -->
    <form>
-     <span id="starwars-search">Search anything Star Wars! <input id="search-item" type="text" ><input id="add-item" value="The Force Is Strong With This Search." type="submit"></span>
+     <span id="starwars-search">Create A Star Wars Button, then Click on it to see the Magic! <input id="search-item" type="text" ><input id="add-item" value="The Force Is Strong With This Search." type="submit"></span>
    </form>
 
    <hr>
-   <div id="search-buttons"></div>
+   <div id="search-buttons">
+    <button data-search-term="Skywalker" class="search-term-btn">Skywalker</button>
+    <button data-search-term="C3PO" class="search-term-btn">C3PO</button>
+    <button data-search-term="Han Solo" class="search-term-btn">Han Solo</button>
+    <button data-search-term="Darth Vader" class="search-term-btn">Darth Vader</button>
+    <button data-search-term="Chewbacca" class="search-term-btn">Chewbacca</button>
+    </div>
    <!-- List of Star Wars Search Items from user input will show up here -->
    <div id="item-drop"></div>
 
